@@ -1,0 +1,623 @@
+1) NEWTON'S FORWARD INTERPOLATION.
+CODE:
+#include<stdio.h> 
+int main() 
+{ 
+int i,j,n; 
+float x[20],y[20][20],a,h,u,sum,p; 
+printf("Enter the number of arguments, n:"); 
+scanf("%d",&n); 
+for(i=0;i<n;i++) 
+{ 
+printf("\Enter the value of x[%d]:",i); 
+scanf("%f",&x[i]); 
+} 
+for(i=0;i<n;i++) 
+{ 
+printf("\Enter the value of y[%d][0]:",i); 
+scanf("%f",&y[i][0]); 
+} 
+for(j=1;j<n;j++) 
+{ 
+for(i=0;i<n-j;i++) 
+{ 
+y[i][j]=y[i+1][j-1]-y[i][j-1]; 
+} 
+} 
+printf("\The forward difference table is:\n"); 
+for(i=0;i<n;i++) 
+{ 
+printf("\n"); 
+for(j=0;j<n-i;j++) 
+{ 
+printf("%f\t",y[i][j]); 
+} 
+} 
+printf("\n\nEnter the value of the interpolating point, a:"); 
+scanf("%f",&a); 
+p=1.0; 
+sum=y[0][0]; 
+h=x[1]-x[0]; 
+u=(a-x[0])/h; 
+for(j=1;j<n;j++) 
+{ 
+p=p*(u-j+1)/j; 
+sum=sum+p*y[0][j]; 
+} 
+printf("\nThe value of y at x=%0.1f is %0.3f",a,sum);
+return 0;
+} 
+
+
+
+
+
+2) NEWTON'S BACKWARD INTERPOLATION.
+CODE:
+#include<stdio.h>
+int main()
+{
+int i,j,n;
+float x[20],y[20][20],a,h,u,sum,p;
+printf("Enter the number of arguments, n:");
+scanf("%d",&n);
+for(i=0;i<n;i++)
+{
+printf("\Enter the value of x[%d]:",i);
+scanf("%f",&x[i]);
+}
+for(i=0;i<n;i++)
+{
+printf("\Enter the value of y[%d][0]:",i);
+scanf("%f",&y[i][0]);
+}
+for(j=1;j<n;j++)
+{
+for(i=j;i<n;i++)
+{
+y[i][j]=y[i][j-1]-y[i-1][j-1];
+}
+}
+printf("\The backward difference table is:\n");
+for(i=0;i<n;i++)
+{
+printf("\n");
+for(j=0;j<=i;j++)
+{
+printf("%f\t",y[i][j]);
+}
+}
+printf("\n\nEnter the value of the interpolating point, a:");
+scanf("%f",&a);
+p=1.0;
+sum=y[n-1][0];
+h=x[1]-x[0];
+u=(a-x[n-1])/h;
+for(j=1;j<n;j++)
+{
+p=p*(u+j-1)/j;
+sum=sum+p*y[n-1][j];
+}
+printf("\nThe value of y at x=%0.1f is %0.3f",a,sum);
+return 0;
+}
+
+
+
+
+
+3) LAGRANGE'S INTERPOLATION.
+CODE:
+#include<stdio.h>
+int main()
+{
+int i,j,n;
+float x[20],y[20],a,sum=0.0,p;
+printf("Enter the number of arguments, n:");
+scanf("%d",&n);
+for(i=0;i<n;i++)
+{
+printf("\Enter the value of x[%d]:",i);
+scanf("%f",&x[i]);
+}
+for(i=0;i<n;i++)
+{
+printf("\Enter the value of y[%d]:",i);
+scanf("%f",&y[i]);
+}
+printf("\Enter the value of the interpolating point, a:");
+scanf("%f",&a);
+for(i=0;i<n;i++)
+{
+p=1.0;
+for(j=0;j<n;j++)
+{
+if(i!=j)
+p=p*(a-x[j])/(x[i]-x[j]);
+}
+sum=sum+p*y[i];
+}
+printf("\nThe value of y at x=%0.1f is %0.3f",a,sum);
+return 0;
+}
+
+
+
+
+
+4) TRAPEZOIDAL RULE.
+CODE:
+#include<stdio.h>
+float f(float x)
+{
+return 1/(1+x*x);
+}
+int main()
+{
+int i,n;
+float a,b,h,sum;
+printf("\Enter the lower limit, a:");
+scanf("%f",&a);
+printf("\Enter the upper limit, b:");
+scanf("%f",&b);
+printf("\Enter the number of sub-intervals, n:");
+scanf("%d",&n);
+h=(b-a)/n;
+sum=f(a)+f(b);
+for(i=1;i<n;i++)
+{
+sum=sum+2*f(a+i*h);
+}
+sum=(h*sum)/2;
+printf("\nThe value of the integral is %0.4f",sum);
+return 0;
+}
+
+
+
+
+5) SIMPSON'S 1/3 RULE.
+CODE:
+#include<stdio.h>
+float f(float x)
+{
+return x*x/(1+x*x*x);
+}
+int main()
+{
+int i,n;
+float a,b,h,sum;
+printf("\Enter the lower limit, a:");
+scanf("%f",&a);
+printf("\Enter the upper limit, b:");
+scanf("%f",&b);
+printf("\Enter the number of sub-intervals, n:");
+scanf("%d",&n);
+h=(b-a)/n;
+sum=f(a)+f(b);
+for(i=1;i<n;i++)
+{
+if(i%2==0)
+sum=sum+2*f(a+i*h);
+else
+sum=sum+4*f(a+i*h);
+}
+sum=(h*sum)/3;
+printf("\nThe value of the integral is %0.4f",sum);
+return 0;
+}
+
+
+
+
+
+6) WEDDLE'S RULE.
+CODE:
+#include<stdio.h>
+float f(float x)
+{
+return x/(1+x);
+}
+int main()
+{
+int i,n;
+float a,b,h,sum;
+printf("\Enter the lower limit, a:");
+scanf("%f",&a);
+printf("\Enter the upper limit, b:");
+scanf("%f",&b);
+printf("\Enter the number of sub-intervals, n:");
+scanf("%d",&n);
+h=(b-a)/n;
+sum=f(a)+f(b);
+for(i=1;i<n;i++)
+{
+if(i%2==0 && i%3==0)
+sum=sum+2*f(a+i*h);
+else if(i%2==0 && i%3!=0)
+sum=sum+f(a+i*h);
+else if(i%2!=0 && i%3==0)
+sum=sum+6*f(a+i*h);
+else
+sum=sum+5*f(a+i*h);
+}
+sum=(3*h*sum)/10;
+printf("\nThe value of the integral is %0.4f",sum);
+return 0;
+}
+
+
+
+
+
+7) NEWTON-RAPHSON METHOD.
+CODE:
+#include<stdio.h>
+#include<math.h>
+float f(float x)
+{
+return x*x*x-5*x-7;
+}
+float df(float x)
+{
+return 3*x*x-5;
+}
+int main()
+{
+int i,n;
+float a,b,x,x0,e;
+printf("\Enter a suitable value of n:");
+scanf("%d",&n);
+for(i=-n;i<=n;i++)
+{
+a=i;
+b=i+1;
+if(f(a)*f(b)<0)
+break;
+}
+x0=(a+b)/2;
+printf("\nAn initial guess is %0.1f",x0);
+printf("\nEnter the value of tolerance:");
+scanf("%f",&e);
+do
+{
+x=x0-f(x0)/df(x0);
+x0=x;
+}while(fabs(f(x))>=e);
+printf("\nThe value of a real root is %0.3f",x);
+return 0;
+}
+
+
+
+
+
+8) REGULA-FALSI METHOD.
+CODE:
+#include<stdio.h>
+#include<math.h>
+float f(float x)
+{
+return(x*x*x-3*x-5);
+}
+int main()
+{
+int i,n;
+float a,b,x,e;
+printf("\Enter a suitable value of n:");
+scanf("%d",&n);
+for(i=-n;i<=n;i++)
+{
+a=i;
+b=i+1;
+if(f(a)*f(b)<0)
+break;
+}
+printf("\nA real root lies between %0.1f and %0.1f",a,b);
+printf("\nEnter the value of tolerance:");
+scanf("%f",&e);
+do
+{
+x=(a*f(b)-b*f(a))/(f(b)-f(a));
+if(f(a)*f(x)<0)
+b=x;
+else
+a=x;
+}while(fabs(f(x))>=e);
+printf("\nThe value of a real root is %0.3f",x);
+return 0;
+}
+
+
+
+
+
+9) EULER'S METHOD.
+CODE:
+#include<stdio.h>
+float f(float x,float y)
+{
+return 3*x+y*y;
+}
+int main()
+{
+float x0,y0,xn,h;
+printf("\Enter the initial value of x:");
+scanf("%f",&x0);
+printf("\Enter the initial value of y:");
+scanf("%f",&y0);
+printf("\Enter the final value of x:");
+scanf("%f",&xn);
+printf("\Enter the step length:");
+scanf("%f",&h);
+do
+{
+y0=y0+h*f(x0,y0);
+x0=x0+h;
+}while(x0<xn);
+printf("\nThe value of y at x=%0.3f is %0.3f",x0,y0);
+return 0;
+}
+
+
+
+
+
+10) RUNGE-KUTTA METHOD.
+CODE:
+#include<stdio.h>
+float f(float x,float y)
+{
+return (x+y)/2;
+}
+int main()
+{
+float x0,y0,xn,h,k1,k2,k3,k4,k;
+printf("\Enter the initial value of x:");
+scanf("%f",&x0);
+printf("\Enter the initial value of y:");
+scanf("%f",&y0);
+printf("\Enter the final value of x:");
+scanf("%f",&xn);
+printf("\Enter the step length:");
+scanf("%f",&h);
+do
+{
+k1=h*f(x0,y0);
+k2=h*f(x0+h/2.0,y0+k1/2.0);
+k3=h*f(x0+h/2.0,y0+k2/2.0);
+k4=h*f(x0+h,y0+k3);
+k=(k1+2*k2+2*k3+k4)/6.0;
+y0=y0+k;
+x0=x0+h;
+}while(x0<xn);
+printf("\nThe value of y at x=%0.3f is %0.3f",xn,y0);
+return 0;
+}
+
+
+
+
+
+11) BISECTION METHOD.
+CODE:
+#include<stdio.h>
+#include<conio.h>
+#include<math.h>
+#define f(x) cos(x) - x * exp(x)
+int main()
+{
+float x0, x1, x2, f0, f1, f2, e;
+int step = 1;
+printf("\nEnter two initial guesses:\n");
+scanf("%f%f", &x0, &x1);
+printf("Enter tolerable error:\n");
+scanf("%f", &e);
+f0 = f(x0);
+f1 = f(x1);
+if( f0 * f1 > 0.0)
+{
+ printf("Incorrect Initial Guesses.\n");
+ goto up;
+}
+printf("\nStep\t\tx0\t\tx1\t\tx2\t\tf(x2)\n");
+do
+{
+ x2 = (x0 + x1)/2;
+ f2 = f(x2);
+ printf("%d\t\t%f\t%f\t%f\t%f\n",step, x0, x1, x2, f2);
+ if( f0 * f2 < 0)
+ {
+ x1 = x2;
+ f1 = f2;
+ }
+ else
+ {
+ x0 = x2;
+ f0 = f2;
+ }
+ step = step + 1;
+}while(fabs(f2)>e);
+printf("\nRoot is: %f", x2);
+return 0;
+}
+
+
+
+
+
+12) GAUSS-ELIMINATION METHOD.
+CODE:
+#include<stdio.h>
+int main()
+{
+ int i,j,k,n;
+ float A[20][20],c,x[10],sum=0.0;
+ printf("\nEnter the order of matrix: ");
+ scanf("%d",&n);
+ printf("\nEnter the elements of augmented matrix row-wise:\n\n");
+ for(i=1; i<=n; i++)
+ {
+ for(j=1; j<=(n+1); j++)
+ {
+ printf("A[%d][%d] : ", i,j);
+ scanf("%f",&A[i][j]);
+ }
+ }
+ for(j=1; j<=n; j++) /* loop for the generation of upper triangular matrix*/
+ {
+ for(i=1; i<=n; i++)
+ {
+ if(i>j)
+ {
+ c=A[i][j]/A[j][j];
+ for(k=1; k<=n+1; k++)
+ {
+ A[i][k]=A[i][k]-c*A[j][k];
+ }
+ }
+ }
+ }
+ x[n]=A[n][n+1]/A[n][n];
+ /* this loop is for backward substitution*/
+ for(i=n-1; i>=1; i--)
+ {
+ sum=0;
+ for(j=i+1; j<=n; j++)
+ {
+ sum=sum+A[i][j]*x[j];
+ }
+ x[i]=(A[i][n+1]-sum)/A[i][i];
+ }
+ printf("\nThe solution is: \n");
+ for(i=1; i<=n; i++)
+ {
+ printf("\nx%d=%f\t",i,x[i]); /* x1, x2, x3 are the required solutions*/
+ }
+ return(0);
+}
+
+
+
+
+
+13) GAUSS-SEIDEL METHOD.
+CODE:
+#include<stdio.h>
+#include<math.h>
+int main()
+{
+ float a[10][10],x[20],sum,temp[10],t;
+ int i,j,k,n,f;
+ printf("\n Enter the order of the matrix:");
+ scanf("%d",&n);
+ printf("\n Enter the tolerance limit:");
+ scanf("%f",&t);
+ printf("\n Enter the element of the matrix\n\t");
+ for(i=1;i<=n;i++)
+ {
+ for(j=1;j<=n+1;j++)
+ scanf("%f",&a[i][j]);
+ printf("\n\t");
+ }
+ for(i=1;i<=n;i++)
+ x[i]=0;
+ f=1;
+ while(f)
+ {
+ for(i=1;i<=n;i++)
+ {
+ sum=0;
+ temp[i]=x[i];
+ for(j=1;j<=n;j++)
+ {
+ if(j!=i)
+ sum+=a[i][j]*x[j];
+ }
+ x[i]=(a[i][n+1]-sum)/a[i][i];
+ }
+ f=0;
+ for(i=1;i<=n;i++)
+ {
+ if(fabs(x[i]-temp[i])>t)
+ f=1;
+ }
+ }printf("result \n");
+ for(i=1;i<=n;i++)
+ printf("x[%d]=%f\n",i,x[i]);
+}
+
+
+
+
+
+14) MEAN,MEDIAN AND MODE.
+CODE:
+#include<stdio.h>
+int main()
+{
+int i,k,n,f[20],freq=0,N,cf[20],max=0;
+float x[20],ll[20],ul[20],sum=0.0,mean,h,median,mode;
+printf("Enter the number of classes: ");
+scanf("%d",&n);
+printf("Enter the lower limits of class intervals: \n");
+for(i=0;i<n;i++)
+{
+printf("Lower limit %d= ",i);
+scanf("%f",&ll[i]);
+}
+printf("Enter the upper limit of class intervals: \n");
+for(i=0;i<n;i++)
+{
+printf("Upper limit %d= ",i);
+scanf("%f",&ul[i]);
+}
+printf("Enter the frequencies of the class intervals: \n");
+for(i=0;i<n;i++)
+{
+printf("Frequency %d=",i);
+scanf("%d",& f[i]);
+}
+//MEAN
+for(i=0;i<n;i++)
+{
+x[i]=(ul[i]+ll[i])/2;
+sum+=x[i]*f[i];
+freq+=f[i];
+}
+mean=sum/freq;
+printf("\n Mean=%0.3f", mean);
+//MEDIAN
+h=ul[0]-ll[0];
+cf[0]=f[0];
+for(i=1;i<n;i++)
+{
+cf[i]=cf[i-1]+f[i];
+}
+N=cf[n-1];
+for(i=0;i<n;i++)
+{
+if(cf[i]>=N/2.0)
+break;
+}
+median=ll[i]+((N/2-cf[i-1]*h)/f[i]);
+printf("\n\n The median class is %.0f - %.0f",ll[i],ul[i]);
+printf("\n Median=%0.3f",median);
+//MODE
+i=0;
+do
+{
+if(max<f[i])
+{
+max=f[i];
+k=i;
+}
+i=i+1;
+}
+while(i<n);
+printf("\n\n The maximum frequency is %d = %d",k,max);
+printf("\n The modal class is %.0f - %.0f",ll[k],ul[k]);
+mode=ll[k]+((f[k]-f[k-1])*h/(2*f[k]-f[k-1]-f[k+1]));
+printf("\n Mode=%0.3f",mode);
+return 0;
+}
